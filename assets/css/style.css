@@ -11,6 +11,7 @@
         --texte: 680px;
         --marge: 250px;
         --gouttiere: 3rem;
+        --colonne: min(var(--texte), calc(100vw - 4rem - var(--marge) - var(--gouttiere)));
     }
 
     html {
@@ -19,7 +20,7 @@
     }
 
     body {
-        font-family: "Albert Sans", system-ui, sans-serif;
+        font-family: "Albert Sans", "Albert Sans Ext", system-ui, sans-serif;
         font-weight: 400;
         background: var(--fond);
     }
@@ -54,7 +55,7 @@
     .container ul,
     .container ol,
     .container blockquote {
-        max-width: var(--texte);
+        max-width: var(--colonne);
     }
 
     /* couverture */
@@ -76,7 +77,7 @@
 
     /* sommaire */
     .sommaire {
-        max-width: var(--texte);
+        max-width: var(--colonne);
         border-top: 1px solid var(--filet);
         border-bottom: 1px solid var(--filet);
         padding: 1rem 0;
@@ -123,7 +124,7 @@
     /* titres */
     .chapitre > h1,
     .notes > h1 {
-        max-width: var(--texte);
+        max-width: var(--colonne);
         font-size: clamp(2rem, 4vw, 2.6rem);
         font-weight: 500;
         line-height: 1.15;
@@ -133,7 +134,7 @@
     }
 
     .chapitre h2 {
-        max-width: var(--texte);
+        max-width: var(--colonne);
         font-size: 1.5rem;
         font-weight: 500;
         line-height: 1.3;
@@ -149,7 +150,7 @@
     }
 
     .chapitre h3 {
-        max-width: var(--texte);
+        max-width: var(--colonne);
         font-size: 1.15rem;
         font-weight: 600;
         line-height: 1.4;
@@ -214,12 +215,16 @@
         line-height: 0;
     }
 
-    /* notes en marge */
+    /* notes en marge, flottantes : une note longue descend sans repousser le texte */
     .bloc-note {
-        display: grid;
-        grid-template-columns: minmax(0, var(--texte)) minmax(190px, var(--marge));
-        column-gap: var(--gouttiere);
-        align-items: start;
+        max-width: var(--colonne);
+    }
+
+    .marge {
+        float: right;
+        clear: right;
+        width: var(--marge);
+        margin-right: calc(-1 * (var(--marge) + var(--gouttiere)));
     }
 
     .marge .note {
@@ -245,7 +250,7 @@
     /* sources */
     .notes {
         border-top: 1px solid var(--filet);
-        max-width: var(--texte);
+        max-width: var(--colonne);
         margin-top: 4rem;
     }
 
@@ -286,20 +291,28 @@
         width: 1.4rem;
         height: 1.4rem;
     }
-}
 
-/* notes sous le paragraphe */
-@media screen and (max-width: 860px) {
+    /* notes sous le paragraphe */
+    @media (max-width: 860px) {
 
-    .container {
-        padding: 0 1.2rem;
-    }
+        .container {
+            padding: 0 1.2rem;
+        }
 
-    .bloc-note {
-        grid-template-columns: 1fr;
-    }
+        :root {
+            --colonne: 100%;
+        }
 
-    .marge {
-        margin-top: -0.4rem;
+        .bloc-note {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .marge {
+            order: 1;
+            float: none;
+            width: auto;
+            margin: -0.4rem 0 0;
+        }
     }
 }
